@@ -12,6 +12,7 @@ import {
     StyleSheet,
     findNodeHandle,
     DeviceInfo,
+    BackHandler, TextInput,
 } from 'react-native';
 
 //提示
@@ -31,12 +32,29 @@ export default class KeyBoard extends Component{
         KeyBoardView: PropTypes.any.isRequired,
     }
 
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this._handleBackPress);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this._handleBackPress);
+    }
+
     constructor() {
         super(...arguments)
         this.state = {
             width: 0,
             showTip: {isShow:false, layout:{x:0,y:0,width:0,height:0}, keyValue:""}
         }
+    }
+
+    _handleBackPress = () => {
+        //检查键盘
+        if (TextInput && TextInput.State.currentlyFocusedField()) {
+            TextInput.State.blurTextInput(TextInput.State.currentlyFocusedField())
+            return true
+        }
+        return false;
     }
 
     _handleDelete = () => {
@@ -112,7 +130,12 @@ export default class KeyBoard extends Component{
         const {KeyBoardView} = this.props
 
         return (
-            <View onLayout={this._onLayout} style={styles.container} ref="keyboard" pointerEvents="box-none">
+            <View
+              onLayout={this._onLayout}
+              style={styles.container}
+              ref="keyboard"
+              pointerEvents="box-none"
+            >
                 <View style={styles.keyBoard} key="keyboard">
                     {
                         !KeyBoardView.customKeyboardTop && (
@@ -145,7 +168,6 @@ export default class KeyBoard extends Component{
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: 'transparent',
         justifyContent: 'flex-end',
     },

@@ -1,13 +1,11 @@
-
 package com.facebook.react.uimanager;
-
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.view.WindowManager;
 
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactRootView;
@@ -26,7 +25,6 @@ import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.views.textinput.ReactEditText;
-
 import com.yusha.customKeyboard.CustomKeyBoardView;
 
 import java.lang.reflect.Method;
@@ -85,6 +83,20 @@ public class RNCustomKeyboardModule extends ReactContextBaseJavaModule {
                                             if(showKeyboard) {
                                                 View keyboard = (View)curEditText.getTag(TAG_ID);
                                                 final Activity activity = getCurrentActivity();
+
+                                                WritableMap coords = Arguments.createMap();
+                                                coords.putDouble("height", 306);
+                                                coords.putDouble("width", activity.getResources().getDisplayMetrics().widthPixels/activity.getResources().getDisplayMetrics().density);
+                                                coords.putDouble("screenX", 0);
+                                                coords.putDouble("screenY", ((activity.getResources().getDisplayMetrics().heightPixels/activity.getResources().getDisplayMetrics().density)-306));
+
+                                                WritableMap data = Arguments.createMap();
+                                                data.putInt("tag", tag);
+                                                data.putMap("endCoordinates", coords);
+
+                                                Log.i("react-native", "------data: " + data);
+                                                sendEvent("keyboardDidShow", data);
+
                                                 if (keyboard.getParent() == null) {
                                                     activity.addContentView(keyboard, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                                                 }

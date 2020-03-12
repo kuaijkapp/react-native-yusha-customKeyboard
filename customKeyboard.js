@@ -13,6 +13,7 @@ import {
   AppRegistry,
     DeviceInfo,
     AppState,
+
 } from 'react-native';
 
 import CustomKeyBoardView from './CustomKeyBoardView'
@@ -159,16 +160,22 @@ _handleAppStateChange = (nextAppState: string) => {
   }
 
   _onChangeText = (text) => {
+    const { maxLength } = this.props;
+    if (maxLength && !!text && text.length > maxLength) return;
+    const pattern = /(^(\d|[0-9]\d)(\.\d{0,2})?$)|(^100$)/;
+    if (pattern.test(text) || text === '') {
       this.setState({text})
       this.props.onChangeText && this.props.onChangeText(text)
+    }
   }
 
   render() {
     const { customKeyboardType, ...others } = this.props;
-    return <TextInput {...others}
-                      ref={this.onRef}
-                      onChangeText={this._onChangeText}
-                      value={this.state.text}
+    return <TextInput
+      {...others}
+      ref={this.onRef}
+      onChangeText={this._onChangeText}
+      value={this.state.text}
     />;
   }
 }
