@@ -12,7 +12,9 @@ import {
     StyleSheet,
     findNodeHandle,
     DeviceInfo,
-    BackHandler, TextInput,
+    BackHandler,
+    TextInput,
+    DeviceEventEmitter,
 } from 'react-native';
 
 //提示
@@ -126,6 +128,10 @@ export default class KeyBoard extends Component{
         this.clearAllRequest && cancelAnimationFrame(this.clearAllRequest)
     }
 
+    _submit=()=>{
+        DeviceEventEmitter.emit('inputOverlaySubmit');
+    }
+
     render() {
         const {KeyBoardView} = this.props
 
@@ -146,7 +152,9 @@ export default class KeyBoard extends Component{
                                     }
                                     <Text style={styles.topDesText}>{KeyBoardView.getKeyBoardName && KeyBoardView.getKeyBoardName()}</Text>
                                 </View>
-                                <TouchableOpacity onPress={this._clearFocus}>
+                                <TouchableOpacity
+                                  style={{height: '100%', justifyContent:'center'}}
+                                  onPress={this._submit}>
                                     <Text style={styles.topCompleteText}>完成</Text>
                                 </TouchableOpacity>
                             </View>
@@ -173,10 +181,10 @@ const styles = StyleSheet.create({
     },
     keyBoard: {
         backgroundColor: '#f6f5f2',
-        height: DeviceInfo.isIPhoneX_deprecated ? 286 : 252,
+        height: DeviceInfo.isIPhoneX_deprecated ? 294 : 260,
     },
     top: {
-        height: 36,
+        height: 44,
         borderTopWidth: StyleSheet.hairlineWidth,
         borderTopColor: '#a5a5a5',
         flexDirection: 'row',
