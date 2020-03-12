@@ -83,20 +83,6 @@ public class RNCustomKeyboardModule extends ReactContextBaseJavaModule {
                                             if(showKeyboard) {
                                                 View keyboard = (View)curEditText.getTag(TAG_ID);
                                                 final Activity activity = getCurrentActivity();
-
-                                                WritableMap coords = Arguments.createMap();
-                                                coords.putDouble("height", 306);
-                                                coords.putDouble("width", activity.getResources().getDisplayMetrics().widthPixels/activity.getResources().getDisplayMetrics().density);
-                                                coords.putDouble("screenX", 0);
-                                                coords.putDouble("screenY", ((activity.getResources().getDisplayMetrics().heightPixels/activity.getResources().getDisplayMetrics().density)-306));
-
-                                                WritableMap data = Arguments.createMap();
-                                                data.putInt("tag", tag);
-                                                data.putMap("endCoordinates", coords);
-
-                                                Log.i("react-native", "------data: " + data);
-                                                sendEvent("keyboardDidShow", data);
-
                                                 if (keyboard.getParent() == null) {
                                                     activity.addContentView(keyboard, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                                                 }
@@ -140,7 +126,7 @@ public class RNCustomKeyboardModule extends ReactContextBaseJavaModule {
                 bundle);
 
         final float scale = activity.getResources().getDisplayMetrics().density;
-        RelativeLayout.LayoutParams lParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Math.round((252+54)*scale));
+        RelativeLayout.LayoutParams lParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Math.round((252)*scale));
         lParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
         layout.addView(rootView, lParams);
         return layout;
