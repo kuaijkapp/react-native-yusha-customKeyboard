@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
     },
     topCompleteText: {
-        color: '#0297fa',
+        color: '#24A3FF',
         fontSize: 15,
         paddingHorizontal: 15,
         paddingVertical: 10,
